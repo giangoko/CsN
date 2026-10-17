@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Hệ thống phát hiện đăng nhập bất thường{% endblock %}</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#f4f6f8;margin:0;color:#222}
+  .wrap{max-width:960px;margin:32px auto;padding:0 16px}
+  .card{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.1);margin-bottom:20px}
+  .narrow{max-width:420px;margin:40px auto}
+  label{display:block;margin:12px 0 4px;font-weight:600}
+  input{width:100%;padding:10px;border:1px solid #bbb;border-radius:6px;box-sizing:border-box}
+  button{margin-top:16px;padding:10px 16px;border:0;border-radius:6px;background:#2563eb;color:#fff;cursor:pointer}
+  button.link{background:none;color:#2563eb;padding:0;margin:0}
+  .flash{padding:10px 14px;border-radius:6px;margin-bottom:12px}
+  .flash.danger{background:#fde2e2;color:#7f1d1d}.flash.success{background:#dcfce7;color:#14532d}
+  .flash.warning{background:#fef3c7;color:#78350f}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:6px 8px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}
+  .badge{padding:2px 8px;border-radius:10px;font-size:12px}
+  .success{background:#dcfce7}.failed{background:#fde2e2}.pending{background:#fef3c7}
+  .grid{display:flex;gap:16px;flex-wrap:wrap}.stat{flex:1;min-width:120px;text-align:center}
+  .stat b{font-size:28px;display:block}.muted{color:#666;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

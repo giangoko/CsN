@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Xác minh vị trí mới{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h2>Xác minh đăng nhập</h2>
+  <p>Mã OTP 6 số đã được gửi tới <b>{{ email }}</b>. Mã có hiệu lực 5 phút, được nhập tối đa 5 lần.</p>
+  <form method="post" action="{{ url_for('verify_location') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="otp">Mã OTP</label>
+    <input id="otp" name="otp" required maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code">
+    <button type="submit">Xác minh</button>
+  </form>
+</div>
+{% endblock %}

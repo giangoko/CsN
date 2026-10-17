@@ -1,0 +1,43 @@
+# Render Blueprint: New > Blueprint > chọn repo GitHub chứa file này.
+# Các biến có sync:false sẽ được Render hỏi giá trị khi tạo (không lưu trong repo).
+services:
+  - type: web
+    name: anomalous-login-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: TRUSTED_PROXY_COUNT
+        value: "1"
+      - key: AUTO_INIT_DB
+        value: "1"
+      - key: DB_MANAGED
+        value: "1"
+      - key: EMAIL_PROVIDER
+        value: brevo
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: EMAIL_SENDER
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false

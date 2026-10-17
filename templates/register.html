@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Đăng ký{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h2>Đăng ký tài khoản</h2>
+  <form method="post" action="{{ url_for('register') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" required autocomplete="username">
+    <label for="password">Mật khẩu (8-128 ký tự)</label>
+    <input id="password" type="password" name="password" required minlength="8" maxlength="128" autocomplete="new-password">
+    <button type="submit">Đăng ký</button>
+  </form>
+  <p class="muted">Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập</a></p>
+</div>
+{% endblock %}

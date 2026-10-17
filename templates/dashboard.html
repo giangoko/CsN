@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2 style="margin:0">Xin chào, {{ email }} {% if is_admin %}<span class="badge pending">admin</span>{% endif %}</h2>
+      <div class="muted">IP hiện tại của bạn (theo máy chủ nhìn thấy): <b>{{ client_ip }}</b></div>
+    </div>
+    <form method="post" action="{{ url_for('logout') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit">Đăng xuất</button>
+    </form>
+  </div>
+</div>
+
+<div class="card grid">
+  <div class="stat"><b>{{ stats.success }}</b>Thành công</div>
+  <div class="stat"><b>{{ stats.failed }}</b>Thất bại</div>
+  <div class="stat"><b>{{ stats.pending }}</b>Chờ OTP</div>
+</div>
+
+{% if is_admin %}
+<div class="card">
+  <h3>IP đang bị chặn</h3>
+  {% if blocked_ips %}
+  <table><tr><th>IP</th><th>Lý do</th><th>Đến</th></tr>
+    {% for b in blocked_ips %}<tr><td>{{ b.ip_address }}</td><td>{{ b.reason }}</td><td>{{ b.blocked_until }}</td></tr>{% endfor %}
+  </table>
+  {% else %}<p class="muted">Không có IP nào đang bị chặn.</p>{% endif %}
+</div>
+
+<div class="card">
+  <h3>Cảnh báo đã gửi
+    {% if alert_avg and alert_avg.n %}<span class="muted">(trung bình {{ '%.0f'|format(alert_avg.avg_ms) }} ms / {{ alert_avg.n }} cảnh báo)</span>{% endif %}
+  </h3>
+  {% if alerts %}
+  <table><tr><th>Thời gian</th><th>Kênh</th><th>Loại</th><th>Kết quả</th><th>Độ trễ</th></tr>
+    {% for a in alerts %}<tr><td>{{ a.created_at.strftime('%H:%M:%S') }}</td><td>{{ a.channel }}</td><td>{{ a.anomaly_type }}</td><td>{{ a.delivery }}</td><td>{{ a.latency_ms }} ms</td></tr>{% endfor %}
+  </table>
+  {% else %}<p class="muted">Chưa có cảnh báo nào.</p>{% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+  <h3>Nhật ký đăng nhập gần nhất {% if not is_admin %}<span class="muted">(chỉ của bạn)</span>{% endif %}</h3>
+  <table>
+    <tr><th>Thời gian</th><th>Tài khoản</th><th>IP</th><th>Kết quả</th><th>Lý do</th></tr>
+    {% for l in logs %}
+    <tr>
+      <td>{{ l.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>{{ l.email or l.attempted_email or '—' }}</td>
+      <td>{{ l.ip_address }}</td>
+      <td><span class="badge {{ l.status }}">{{ l.status }}</span></td>
+      <td>{{ l.reason or '' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
